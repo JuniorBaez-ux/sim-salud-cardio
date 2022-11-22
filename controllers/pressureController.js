@@ -43,7 +43,11 @@ const createPressure = async (req, res) => {
         //Check for a downward trend in the last 4 readings
         if(lastFourReadings.length === 4){
             if(lastFourReadings[0].systolicpressure < lastFourReadings[1].systolicpressure && lastFourReadings[1].systolicpressure < lastFourReadings[2].systolicpressure && lastFourReadings[2].systolicpressure < lastFourReadings[3].systolicpressure){
-                return res.status(409).send("Your pressure tendency is going downwards, please seek medical attention");
+                //return a personalized response with the diagnosis and the source
+                res.status(200).json({
+                    message: "Your blood pressure is in a downward trend. Please consult a doctor",
+                    source: "https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings"
+                });
             }
         }
         
@@ -51,20 +55,29 @@ const createPressure = async (req, res) => {
         //Pressure level for medical attention
         if(systolicpressure > 180 || diastolicpressure > 120){
             //TODO: Implement a call or message to the user's emergency contact
-            return res.status(409).send("You are in a hypertensive crisis, please seek medical attention");
+            res.status(200).json({
+                message: "You are in a hypertensive crisis, please seek medical attention",
+                source: "https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings"
+            });
         }
 
         //Hypertensive stage 1
         //Pressure level to suggest exercise
         if(systolicpressure > 130 || diastolicpressure > 80){
-            return res.status(409).send("You are in a hypertensive stage 1, please exercise more");
+            res.status(200).json({
+                message: "You are in a hypertensive stage 1, is suggested that you exercise more",
+                source: "https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings"
+            });
         }
 
         //Very low pressure level
         //Pressure level to give CPR
         if(systolicpressure < 50 || diastolicpressure < 40){
             //TODO: Implement a call or message to the user's emergency contact
-            return res.status(409).send("You should be given CPR immediately");
+            res.status(200).json({
+                message: "You should be given CPR immediately",
+                source: "https://www.bjanaesthesia.org/article/S0007-0912(20)30051-9/fulltext"
+            });
         } 
 
 
